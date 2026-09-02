@@ -17,8 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: "Newest first", value: "newest" },
-  { label: "Oldest first", value: "oldest" },
   { label: "Name (A–Z)", value: "name-asc" },
   { label: "Name (Z–A)", value: "name-desc" },
 ];
@@ -31,11 +29,11 @@ function parseCategory(value: string | null): TemplateCategory | null {
 }
 
 function parseSort(value: string | null): SortOption {
-  if (!value) return "newest";
+  if (!value) return "name-asc";
   const validSorts = SORT_OPTIONS.map((s) => s.value);
   return validSorts.includes(value as SortOption)
     ? (value as SortOption)
-    : "newest";
+    : "name-asc";
 }
 
 function formatCategoryName(cat: string): string {
@@ -98,7 +96,7 @@ export function TemplateGallery() {
 
     const params = new URLSearchParams();
     if (category) params.set("category", category);
-    if (sort !== "newest") params.set("sort", sort);
+    if (sort !== "name-asc") params.set("sort", sort);
     const qs = params.toString();
     router.replace(qs ? `/templates?${qs}` : "/templates", { scroll: false });
   }, [category, sort, fetchTemplates, router]);
@@ -113,7 +111,7 @@ export function TemplateGallery() {
 
   const handleResetFilters = () => {
     setCategory(null);
-    setSort("newest");
+    setSort("name-asc");
   };
 
   return (
@@ -194,7 +192,7 @@ export function TemplateGallery() {
             {category ? formatCategoryName(category) : ""} template
             {templates.length === 1 ? "" : "s"}
           </span>
-          {(category !== null || sort !== "newest") && (
+          {(category !== null || sort !== "name-asc") && (
             <button
               onClick={handleResetFilters}
               className="flex items-center gap-1 hover:text-fg transition-colors"
