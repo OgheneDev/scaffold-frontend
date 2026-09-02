@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-inset: var(--bg-inset);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-dim: var(--accent-dim);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --animate-fade-in: fade-in 0.4s ease-out;
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+:root {
+  --bg: #0a0a0a;
+  --bg-elevated: #121212;
+  --bg-inset: #050505;
+  --border: #232323;
+  --border-strong: #333333;
+  --fg: #f4f3ee;
+  --fg-muted: #9c9c95;
+  --fg-subtle: #6a6a64;
+  --accent: #c8f064;
+  --accent-foreground: #0a0a0a;
+  --accent-dim: #33390f;
+  --danger: #ef6a5f;
+  --danger-foreground: #1a0605;
+  --warning: #f0b564;
+  --success: #7fd88f;
+}
+
+.light {
+  --bg: #faf9f6;
+  --bg-elevated: #ffffff;
+  --bg-inset: #f0efe9;
+  --border: #e2e0d8;
+  --border-strong: #cbc9bf;
+  --fg: #14140f;
+  --fg-muted: #5c5c54;
+  --fg-subtle: #8c8c82;
+  --accent: #557a12;
+  --accent-foreground: #f4f3ee;
+  --accent-dim: #e4f0c4;
+  --danger: #c73a2e;
+  --danger-foreground: #ffffff;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
