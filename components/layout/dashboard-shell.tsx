@@ -12,6 +12,7 @@ import {
   LogOut,
   Menu,
   X,
+  CirclePlus,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/lib/auth/auth-store";
@@ -47,7 +48,7 @@ function NavItems({ onNavigate }: { onNavigate?: () => void }) {
           >
             <item.icon
               className={cn(
-                "size-[18px] transition-transform group-hover:scale-110",
+                "size-4.5 transition-transform group-hover:scale-110",
                 active ? "text-accent" : "text-fg-subtle group-hover:text-fg",
               )}
             />
@@ -97,7 +98,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       alt="Scaffold Logo"
       width={26}
       height={26}
-      className={cn("rounded-[6px] object-contain shadow-sm", className)}
+      className={cn("rounded-sm object-contain shadow-sm", className)}
     />
   );
 
@@ -117,10 +118,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         <Button
           asChild
-          className="mb-8 w-full justify-start shadow-sm transition-transform hover:scale-[1.02]"
+          className="mb-8 w-full justify-start font-medium text-md shadow-sm transition-transform hover:scale-[1.02]"
         >
           <Link href="/templates">
-            <Plus className="mr-2 size-4" /> New site
+            <CirclePlus size={29} className="mr-2" /> New site
           </Link>
         </Button>
 
@@ -215,7 +216,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               onClick={handleLogout}
               className="mt-auto flex items-center gap-3 rounded-lg border border-border/40 bg-bg p-3 text-sm font-medium text-fg-muted transition-colors hover:border-border hover:text-destructive"
             >
-              <LogOut className="size-[18px]" />
+              <LogOut className="size-4.5" />
               Log out
             </button>
           </div>

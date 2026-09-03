@@ -66,5 +66,5 @@ export const sitesApi = {
     apiClient.patch<Site>(`/sites/${id}`, { status: "draft" as SiteStatus }),
 
   getPublicBySlug: (slug: string) =>
-    apiClient.get<Site>(`/sites/${slug}`, { skipAuth: true }),
+    apiClient.get<Site>(`/sites/slug/${slug}`, { skipAuth: true }),
 };

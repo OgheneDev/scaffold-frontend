@@ -49,6 +49,8 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export function MarketingNav() {
+  const [mounted, setMounted] = useState(false);
+
   const status = useAuthStore((s) => s.status);
   const isAuthed = status === "authenticated";
 
@@ -59,14 +61,16 @@ export function MarketingNav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
 
-  // Handle header background blur on scroll
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // IntersectionObserver for active section highlight (ScrollSpy)
   useEffect(() => {
     if (pathname !== "/") {
       setActiveSection("");
@@ -82,7 +86,6 @@ export function MarketingNav() {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
         } else {
-          // Clear active state if this target section is no longer intersecting
           setActiveSection((prev) => (prev === entry.target.id ? "" : prev));
         }
       });
@@ -90,7 +93,7 @@ export function MarketingNav() {
 
     const observerOptions: IntersectionObserverInit = {
       root: null,
-      rootMargin: "-20% 0px -50% 0px", // Section must be within upper-middle viewport
+      rootMargin: "-20% 0px -50% 0px",
       threshold: 0,
     };
 
@@ -107,7 +110,6 @@ export function MarketingNav() {
     return () => observer.disconnect();
   }, [pathname]);
 
-  // Handle smooth scroll navigation with header offset (Without changing URL hash)
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
       if (!item.isAnchor || !item.anchorId) return;
@@ -131,7 +133,6 @@ export function MarketingNav() {
       };
 
       if (pathname !== "/") {
-        // If on another route, navigate to homepage without hash and scroll after mount
         router.push("/");
         setTimeout(() => {
           scrollToTarget(item.anchorId!);
@@ -139,13 +140,11 @@ export function MarketingNav() {
         return;
       }
 
-      // Smooth scroll without updating URL hash
       scrollToTarget(item.anchorId);
     },
     [pathname, router],
   );
 
-  // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
@@ -154,7 +153,6 @@ export function MarketingNav() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Prevent background scroll when mobile drawer is open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
     return () => {
@@ -169,6 +167,98 @@ export function MarketingNav() {
     return pathname === "/" && activeSection === item.anchorId;
   };
 
+  const renderAuthControls = () => {
+    if (!mounted) {
+      return (
+        <div className="hidden md:flex items-center gap-2">
+          <div className="h-9 w-20 rounded-md bg-bg-elevated/50 animate-pulse" />
+          <div className="h-9 w-24 rounded-md bg-bg-elevated/50 animate-pulse" />
+        </div>
+      );
+    }
+
+    if (isAuthed) {
+      return (
+        <Button
+          asChild
+          size="sm"
+          className="h-9 px-4 text-xs font-medium shadow-sm"
+        >
+          <Link href="/dashboard">
+            <LayoutDashboard className="mr-2 h-3.5 w-3.5" />
+            Dashboard
+          </Link>
+        </Button>
+      );
+    }
+
+    return (
+      <>
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="h-9 px-3 text-xs font-medium text-fg-muted hover:text-fg hover:bg-bg-elevated"
+        >
+          <Link href="/login">Log in</Link>
+        </Button>
+        <Button
+          asChild
+          size="sm"
+          className="h-9 px-4 text-xs font-medium shadow-sm transition-transform active:scale-95"
+        >
+          <Link href="/register">
+            <span>Get Started</span>
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+          </Link>
+        </Button>
+      </>
+    );
+  };
+
+  const renderMobileAuthControls = () => {
+    if (!mounted) {
+      return (
+        <div className="flex flex-col gap-3 pt-6 border-t border-border/60">
+          <div className="h-12 w-full rounded-md bg-bg-elevated/50 animate-pulse" />
+          <div className="h-12 w-full rounded-md bg-bg-elevated/50 animate-pulse" />
+        </div>
+      );
+    }
+
+    if (isAuthed) {
+      return (
+        <Button asChild size="lg" className="w-full text-sm font-medium">
+          <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+            <LayoutDashboard className="mr-2 size-4" />
+            Go to Dashboard
+          </Link>
+        </Button>
+      );
+    }
+
+    return (
+      <>
+        <Button
+          asChild
+          variant="outline"
+          size="lg"
+          className="w-full text-sm font-medium"
+        >
+          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+            <LogIn className="mr-2 size-4" />
+            Log in
+          </Link>
+        </Button>
+        <Button asChild size="lg" className="w-full text-sm font-medium">
+          <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
+            Get started free
+          </Link>
+        </Button>
+      </>
+    );
+  };
+
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-200 ${
@@ -178,7 +268,6 @@ export function MarketingNav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        {/* Brand & Logo */}
         <Link
           href="/"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -197,7 +286,6 @@ export function MarketingNav() {
           </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1 rounded-full border border-border/40 bg-bg-inset/40 p-1 backdrop-blur-sm">
           {NAV_ITEMS.map((item) => {
             const active = isLinkActive(item);
@@ -242,45 +330,11 @@ export function MarketingNav() {
           })}
         </nav>
 
-        {/* Desktop Auth Controls */}
         <div className="flex items-center gap-3">
           <div className="hidden md:flex items-center gap-2">
-            {isAuthed ? (
-              <Button
-                asChild
-                size="sm"
-                className="h-9 px-4 text-xs font-medium shadow-sm"
-              >
-                <Link href="/dashboard">
-                  <LayoutDashboard className="mr-2 h-3.5 w-3.5" />
-                  Dashboard
-                </Link>
-              </Button>
-            ) : (
-              <>
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  className="h-9 px-3 text-xs font-medium text-fg-muted hover:text-fg hover:bg-bg-elevated"
-                >
-                  <Link href="/login">Log in</Link>
-                </Button>
-                <Button
-                  asChild
-                  size="sm"
-                  className="h-9 px-4 text-xs font-medium shadow-sm transition-transform active:scale-95"
-                >
-                  <Link href="/register">
-                    <span>Get Started</span>
-                    <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                  </Link>
-                </Button>
-              </>
-            )}
+            {renderAuthControls()}
           </div>
 
-          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -299,7 +353,6 @@ export function MarketingNav() {
         </div>
       </div>
 
-      {/* Mobile Menu Drawer */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 h-[calc(100vh-4rem)] w-full bg-bg/95 backdrop-blur-md border-t border-border/60 px-6 py-6 flex flex-col justify-between overflow-y-auto">
           <div className="flex flex-col gap-1">
@@ -353,46 +406,7 @@ export function MarketingNav() {
           </div>
 
           <div className="flex flex-col gap-3 pt-6 border-t border-border/60">
-            {isAuthed ? (
-              <Button asChild size="lg" className="w-full text-sm font-medium">
-                <Link
-                  href="/dashboard"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <LayoutDashboard className="mr-2 size-4" />
-                  Go to Dashboard
-                </Link>
-              </Button>
-            ) : (
-              <>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="w-full text-sm font-medium"
-                >
-                  <Link
-                    href="/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <LogIn className="mr-2 size-4" />
-                    Log in
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full text-sm font-medium"
-                >
-                  <Link
-                    href="/register"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Get started free
-                  </Link>
-                </Button>
-              </>
-            )}
+            {renderMobileAuthControls()}
           </div>
         </div>
       )}
