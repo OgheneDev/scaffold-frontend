@@ -47,7 +47,7 @@ function Img({
 // ---------------------------------------------------------------------------
 export function NavbarSection({ content }: { content: NavbarContent }) {
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-(--site-muted)/20 bg-[var(--site-background)]/90 backdrop-blur">
+    <header className="sticky top-0 z-30 w-full border-b border-(--site-muted)/20 bg-(--site-background)/90 backdrop-blur">
       <div className={`${container} flex h-16 items-center justify-between`}>
         <span className="text-lg font-semibold" style={headingFont}>
           {content.logo}
@@ -56,7 +56,7 @@ export function NavbarSection({ content }: { content: NavbarContent }) {
           {content.links.map((link) => (
             <span
               key={link.label}
-              className="cursor-pointer text-sm text-[var(--site-foreground)]/75 transition-colors hover:text-[var(--site-foreground)]"
+              className="cursor-pointer text-sm text-(--site-foreground)/75 transition-colors hover:text-(--site-foreground)"
               onClick={() => {
                 if (link.href.startsWith("#")) {
                   document
@@ -87,7 +87,7 @@ export function NavbarSection({ content }: { content: NavbarContent }) {
         </nav>
         {content.button ? (
           <span
-            className="hidden cursor-pointer rounded-[var(--site-radius)] bg-[var(--site-primary)] px-4 py-2 text-sm font-medium text-[var(--site-background)] transition-opacity hover:opacity-90 md:inline-flex"
+            className="hidden cursor-pointer rounded-(--site-radius) bg-(--site-primary) px-4 py-2 text-sm font-medium text-(--site-background) transition-opacity hover:opacity-90 md:inline-flex"
             style={radius}
             onClick={() => (window.location.href = content.button!.href)}
             role="button"
@@ -118,7 +118,7 @@ export function HeroSection({ content }: { content: HeroContent }) {
     >
       <div>
         {content.eyebrow ? (
-          <p className="mb-4 text-sm font-medium text-[var(--site-primary)]">
+          <p className="mb-4 text-sm font-medium text-(--site-primary)">
             {content.eyebrow}
           </p>
         ) : null}
@@ -128,13 +128,13 @@ export function HeroSection({ content }: { content: HeroContent }) {
         >
           {content.heading}
         </h1>
-        <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[var(--site-foreground)]/70">
+        <p className="mt-5 max-w-md text-[15px] leading-relaxed text-(--site-foreground)/70">
           {content.description}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           {content.primaryButton ? (
             <span
-              className="cursor-pointer rounded-[var(--site-radius)] bg-[var(--site-primary)] px-5 py-2.5 text-sm font-medium text-[var(--site-background)] transition-opacity hover:opacity-90"
+              className="cursor-pointer rounded-(--site-radius) bg-(--site-primary) px-5 py-2.5 text-sm font-medium text-(--site-background) transition-opacity hover:opacity-90"
               style={radius}
               onClick={() =>
                 (window.location.href = content.primaryButton!.href)
@@ -153,7 +153,7 @@ export function HeroSection({ content }: { content: HeroContent }) {
           ) : null}
           {content.secondaryButton ? (
             <span
-              className="cursor-pointer rounded-[var(--site-radius)] border border-[var(--site-muted)]/50 px-5 py-2.5 text-sm font-medium text-[var(--site-foreground)] transition-colors hover:border-[var(--site-foreground)]/40"
+              className="cursor-pointer rounded-(--site-radius) border border-(--site-muted)/50 px-5 py-2.5 text-sm font-medium text-(--site-foreground) transition-colors hover:border-(--site-foreground)/40"
               style={radius}
               onClick={() =>
                 (window.location.href = content.secondaryButton!.href)
@@ -176,11 +176,11 @@ export function HeroSection({ content }: { content: HeroContent }) {
         <Img
           src={content.image.src}
           alt={content.image.alt}
-          className="aspect-[4/3] w-full object-cover"
+          className="aspect-4/3 w-full object-cover"
         />
       ) : (
         <div
-          className="aspect-[4/3] w-full rounded-[var(--site-radius)] bg-[var(--site-primary)]/10"
+          className="aspect-4/3 w-full rounded-(--site-radius) bg-(--site-primary)/10"
           style={radius}
         />
       )}
@@ -202,7 +202,7 @@ export function FeaturesSection({ content }: { content: FeaturesContent }) {
         {content.items.map((item) => (
           <div key={item.title}>
             <div
-              className="mb-4 flex size-10 items-center justify-center bg-[var(--site-primary)]/10 text-[var(--site-primary)]"
+              className="mb-4 flex size-10 items-center justify-center bg-(--site-primary)/10 text-(--site-primary)"
               style={radius}
             >
               <span className="text-sm font-semibold">
@@ -212,7 +212,7 @@ export function FeaturesSection({ content }: { content: FeaturesContent }) {
             <h3 className="text-base font-semibold" style={headingFont}>
               {item.title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--site-foreground)]/65">
+            <p className="mt-2 text-sm leading-relaxed text-(--site-foreground)/65">
               {item.description}
             </p>
           </div>
@@ -236,7 +236,7 @@ export function ServicesSection({ content }: { content: ServicesContent }) {
         {content.items.map((item) => (
           <div
             key={item.title}
-            className="overflow-hidden border border-[var(--site-muted)]/25"
+            className="overflow-hidden border border-(--site-muted)/25"
             style={radius}
           >
             {item.image ? (
@@ -250,7 +250,7 @@ export function ServicesSection({ content }: { content: ServicesContent }) {
               <h3 className="text-base font-semibold" style={headingFont}>
                 {item.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--site-foreground)]/65">
+              <p className="mt-2 text-sm leading-relaxed text-(--site-foreground)/65">
                 {item.description}
               </p>
             </div>
@@ -277,7 +277,7 @@ export function AboutSection({ content }: { content: AboutContent }) {
         />
       ) : (
         <div
-          className="aspect-square w-full bg-[var(--site-primary)]/10"
+          className="aspect-square w-full bg-(--site-primary)/10"
           style={radius}
         />
       )}
@@ -285,7 +285,7 @@ export function AboutSection({ content }: { content: AboutContent }) {
         <h2 className="text-3xl font-semibold" style={headingFont}>
           {content.heading}
         </h2>
-        <p className="mt-4 text-[15px] leading-relaxed text-[var(--site-foreground)]/70">
+        <p className="mt-4 text-[15px] leading-relaxed text-(--site-foreground)/70">
           {content.description}
         </p>
       </div>
@@ -307,16 +307,16 @@ export function StatsSection({ content }: { content: StatsContent }) {
           {content.heading}
         </h2>
       ) : null}
-      <div className="grid grid-cols-2 gap-8 border-t border-[var(--site-muted)]/25 pt-10 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-8 border-t border-(--site-muted)/25 pt-10 md:grid-cols-4">
         {content.items.map((item) => (
           <div key={item.label} className="text-center">
             <div
-              className="text-3xl font-semibold text-[var(--site-primary)]"
+              className="text-3xl font-semibold text-(--site-primary)"
               style={headingFont}
             >
               {item.value}
             </div>
-            <div className="mt-1 text-sm text-[var(--site-foreground)]/60">
+            <div className="mt-1 text-sm text-(--site-foreground)/60">
               {item.label}
             </div>
           </div>
@@ -341,10 +341,10 @@ export function TestimonialsSection({
         {content.items.map((item) => (
           <figure
             key={item.name}
-            className="border border-[var(--site-muted)]/25 p-6"
+            className="border border-(--site-muted)/25 p-6"
             style={radius}
           >
-            <blockquote className="text-[15px] leading-relaxed text-[var(--site-foreground)]/80">
+            <blockquote className="text-[15px] leading-relaxed text-(--site-foreground)/80">
               “{item.quote}”
             </blockquote>
             <figcaption className="mt-5 flex items-center gap-3">
@@ -356,7 +356,7 @@ export function TestimonialsSection({
               <div>
                 <div className="text-sm font-medium">{item.name}</div>
                 {item.role ? (
-                  <div className="text-xs text-[var(--site-foreground)]/55">
+                  <div className="text-xs text-(--site-foreground)/55">
                     {item.role}
                   </div>
                 ) : null}
@@ -398,16 +398,13 @@ export function PricingSection({ content }: { content: PricingContent }) {
               {plan.price}
             </div>
             {plan.description ? (
-              <p className="mt-2 text-sm text-[var(--site-foreground)]/60">
+              <p className="mt-2 text-sm text-(--site-foreground)/60">
                 {plan.description}
               </p>
             ) : null}
             <ul className="mt-6 flex-1 space-y-2.5">
               {plan.features.map((f) => (
-                <li
-                  key={f}
-                  className="text-sm text-[var(--site-foreground)]/75"
-                >
+                <li key={f} className="text-sm text-(--site-foreground)/75">
                   · {f}
                 </li>
               ))}
@@ -452,16 +449,16 @@ export function FaqSection({ content }: { content: FaqContent }) {
   return (
     <section className={`${container} py-20`}>
       <SectionHeading heading={content.heading} />
-      <div className="mx-auto mt-10 max-w-2xl divide-y divide-[var(--site-muted)]/25 border-y border-[var(--site-muted)]/25">
+      <div className="mx-auto mt-10 max-w-2xl divide-y divide-(--site-muted)/25 border-y border-(--site-muted)/25">
         {content.items.map((item) => (
           <details key={item.question} className="group py-4">
             <summary className="flex cursor-pointer list-none items-center justify-between text-[15px] font-medium">
               {item.question}
-              <span className="ml-4 text-[var(--site-foreground)]/40 transition-transform group-open:rotate-45">
+              <span className="ml-4 text-(--site-foreground)/40 transition-transform group-open:rotate-45">
                 +
               </span>
             </summary>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--site-foreground)]/65">
+            <p className="mt-3 text-sm leading-relaxed text-(--site-foreground)/65">
               {item.answer}
             </p>
           </details>
@@ -508,9 +505,7 @@ export function TeamSection({ content }: { content: TeamContent }) {
               className="aspect-square w-full object-cover"
             />
             <div className="mt-3 text-sm font-medium">{m.name}</div>
-            <div className="text-xs text-[var(--site-foreground)]/55">
-              {m.role}
-            </div>
+            <div className="text-xs text-(--site-foreground)/55">{m.role}</div>
           </div>
         ))}
       </div>
@@ -536,12 +531,12 @@ export function CtaSection({ content }: { content: CtaContent }) {
           {content.heading}
         </h2>
         {content.description ? (
-          <p className="max-w-md text-[15px] text-[var(--site-foreground)]/70">
+          <p className="max-w-md text-[15px] text-(--site-foreground)/70">
             {content.description}
           </p>
         ) : null}
         <span
-          className="mt-2 cursor-pointer rounded-[var(--site-radius)] bg-[var(--site-primary)] px-6 py-2.5 text-sm font-medium text-[var(--site-background)] transition-opacity hover:opacity-90"
+          className="mt-2 cursor-pointer rounded-(--site-radius) bg-(--site-primary) px-6 py-2.5 text-sm font-medium text-(--site-background) transition-opacity hover:opacity-90"
           style={radius}
           onClick={() => (window.location.href = content.button.href)}
           role="button"
@@ -565,7 +560,7 @@ export function CtaSection({ content }: { content: CtaContent }) {
 // ---------------------------------------------------------------------------
 export function FooterSection({ content }: { content: FooterContent }) {
   return (
-    <footer className="border-t border-[var(--site-muted)]/20 py-10">
+    <footer className="border-t border-(--site-muted)/20 py-10">
       <div
         className={`${container} flex flex-col items-center justify-between gap-4 md:flex-row`}
       >
@@ -576,7 +571,7 @@ export function FooterSection({ content }: { content: FooterContent }) {
           {content.links.map((link) => (
             <span
               key={link.label}
-              className="cursor-pointer text-sm text-[var(--site-foreground)]/60 hover:text-[var(--site-foreground)]"
+              className="cursor-pointer text-sm text-(--site-foreground)/60 hover:text-(--site-foreground)"
               onClick={() => {
                 if (link.href.startsWith("#")) {
                   document
@@ -605,7 +600,7 @@ export function FooterSection({ content }: { content: FooterContent }) {
             </span>
           ))}
         </nav>
-        <span className="text-xs text-[var(--site-foreground)]/45">
+        <span className="text-xs text-(--site-foreground)/45">
           {content.copyright}
         </span>
       </div>
@@ -626,7 +621,7 @@ function SectionHeading({
         {heading}
       </h2>
       {description ? (
-        <p className="mt-3 text-[15px] text-[var(--site-foreground)]/65">
+        <p className="mt-3 text-[15px] text-(--site-foreground)/65">
           {description}
         </p>
       ) : null}
