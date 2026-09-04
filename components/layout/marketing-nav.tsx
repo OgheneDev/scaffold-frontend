@@ -19,31 +19,24 @@ import {
 
 interface NavItem {
   label: string;
-  href: string;
-  isAnchor: boolean;
-  anchorId?: string;
+  targetId: string;
   icon: React.ComponentType<{ className?: string }>;
 }
 
 const NAV_ITEMS: NavItem[] = [
   {
     label: "Templates",
-    href: "/templates",
-    isAnchor: false,
+    targetId: "templates",
     icon: LayoutTemplate,
   },
   {
     label: "How it works",
-    href: "#how-it-works",
-    isAnchor: true,
-    anchorId: "how-it-works",
+    targetId: "how-it-works",
     icon: Zap,
   },
   {
     label: "About us",
-    href: "#about-us",
-    isAnchor: true,
-    anchorId: "about-us",
+    targetId: "about-us",
     icon: Info,
   },
 ];
@@ -60,6 +53,7 @@ export function MarketingNav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [pendingTargetId, setPendingTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -77,9 +71,7 @@ export function MarketingNav() {
       return;
     }
 
-    const anchorIds = NAV_ITEMS.filter(
-      (item) => item.isAnchor && item.anchorId,
-    ).map((item) => item.anchorId as string);
+    const anchorIds = NAV_ITEMS.map((item) => item.targetId);
 
     const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
@@ -110,40 +102,48 @@ export function MarketingNav() {
     return () => observer.disconnect();
   }, [pathname]);
 
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
-      if (!item.isAnchor || !item.anchorId) return;
+  const scrollToTarget = useCallback((targetId: string) => {
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      const headerOffset = 72;
+      const elementPosition =
+        targetEl.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerOffset;
 
-      e.preventDefault();
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+      setPendingTargetId(null);
+      return true;
+    }
+    return false;
+  }, []);
+
+  const handleNavClick = useCallback(
+    (item: NavItem) => {
       setIsMobileMenuOpen(false);
 
-      const scrollToTarget = (targetId: string) => {
-        const targetEl = document.getElementById(targetId);
-        if (targetEl) {
-          const headerOffset = 72;
-          const elementPosition =
-            targetEl.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        }
-      };
-
       if (pathname !== "/") {
+        setPendingTargetId(item.targetId);
         router.push("/");
-        setTimeout(() => {
-          scrollToTarget(item.anchorId!);
-        }, 150);
         return;
       }
 
-      scrollToTarget(item.anchorId);
+      scrollToTarget(item.targetId);
     },
-    [pathname, router],
+    [pathname, router, scrollToTarget],
   );
+
+  useEffect(() => {
+    if (pathname !== "/" || !pendingTargetId) return;
+
+    const frame = requestAnimationFrame(() => {
+      scrollToTarget(pendingTargetId);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [pathname, pendingTargetId, scrollToTarget]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -161,10 +161,7 @@ export function MarketingNav() {
   }, [isMobileMenuOpen]);
 
   const isLinkActive = (item: NavItem) => {
-    if (!item.isAnchor) {
-      return pathname === item.href;
-    }
-    return pathname === "/" && activeSection === item.anchorId;
+    return pathname === "/" && activeSection === item.targetId;
   };
 
   const renderAuthControls = () => {
@@ -286,18 +283,19 @@ export function MarketingNav() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-1 rounded-full border border-border/40 bg-bg-inset/40 p-1 backdrop-blur-sm">
-          {NAV_ITEMS.map((item) => {
-            const active = isLinkActive(item);
-            const Icon = item.icon;
+        {pathname !== "/templates" && (
+          <nav className="hidden md:flex items-center gap-1 rounded-full border border-border/40 bg-bg-inset/40 p-1 backdrop-blur-sm">
+            {NAV_ITEMS.map((item) => {
+              const active = isLinkActive(item);
+              const Icon = item.icon;
 
-            if (item.isAnchor) {
               return (
-                <a
+                <Button
                   key={item.label}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className={`relative flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 ${
+                  type="button"
+                  variant="ghost"
+                  onClick={() => handleNavClick(item)}
+                  className={`relative h-auto cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 ${
                     active
                       ? "bg-bg-elevated text-fg shadow-sm border border-border/60"
                       : "text-fg-muted hover:text-fg hover:bg-bg-elevated/40"
@@ -307,28 +305,11 @@ export function MarketingNav() {
                     className={`h-3.5 w-3.5 ${active ? "text-accent" : "text-fg-subtle"}`}
                   />
                   <span>{item.label}</span>
-                </a>
+                </Button>
               );
-            }
-
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`relative flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 ${
-                  active
-                    ? "bg-bg-elevated text-fg shadow-sm border border-border/60"
-                    : "text-fg-muted hover:text-fg hover:bg-bg-elevated/40"
-                }`}
-              >
-                <Icon
-                  className={`h-3.5 w-3.5 ${active ? "text-accent" : "text-fg-subtle"}`}
-                />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+            })}
+          </nav>
+        )}
 
         <div className="flex items-center gap-3">
           <div className="hidden md:flex items-center gap-2">
@@ -359,18 +340,19 @@ export function MarketingNav() {
             <span className="text-[11px] font-mono text-fg-subtle uppercase tracking-wider mb-2 px-3">
               Navigation
             </span>
-            <nav className="flex flex-col gap-1">
-              {NAV_ITEMS.map((item) => {
-                const active = isLinkActive(item);
-                const Icon = item.icon;
+            {pathname !== "/templates" && (
+              <nav className="flex flex-col gap-1">
+                {NAV_ITEMS.map((item) => {
+                  const active = isLinkActive(item);
+                  const Icon = item.icon;
 
-                if (item.isAnchor) {
                   return (
-                    <a
+                    <Button
                       key={item.label}
-                      href={item.href}
-                      onClick={(e) => handleNavClick(e, item)}
-                      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                      type="button"
+                      variant="ghost"
+                      onClick={() => handleNavClick(item)}
+                      className={`h-auto w-full justify-start rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                         active
                           ? "bg-bg-elevated text-fg font-semibold border border-border/40"
                           : "text-fg-muted hover:bg-bg-elevated/50 hover:text-fg"
@@ -380,29 +362,11 @@ export function MarketingNav() {
                         className={`size-4 ${active ? "text-accent" : "text-fg-subtle"}`}
                       />
                       {item.label}
-                    </a>
+                    </Button>
                   );
-                }
-
-                return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                      active
-                        ? "bg-bg-elevated text-fg font-semibold border border-border/40"
-                        : "text-fg-muted hover:bg-bg-elevated/50 hover:text-fg"
-                    }`}
-                  >
-                    <Icon
-                      className={`size-4 ${active ? "text-accent" : "text-fg-subtle"}`}
-                    />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
+                })}
+              </nav>
+            )}
           </div>
 
           <div className="flex flex-col gap-3 pt-6 border-t border-border/60">

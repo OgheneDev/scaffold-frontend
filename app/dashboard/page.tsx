@@ -47,20 +47,20 @@ export default function DashboardOverviewPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-fg">
+          <h1 className="font-display text-2xl font-semibold text-fg text-center md:text-start">
             {user ? `Welcome back, ${user.name.split(" ")[0]}` : "Overview"}
           </h1>
-          <p className="mt-1 text-sm text-fg-muted">
+          <p className="mt-1 text-sm text-fg-muted text-center md:text-start">
             Here&apos;s what&apos;s happening across your sites.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button asChild variant="secondary">
+        <div className="flex flex-col items-start md:flex-row gap-2">
+          <Button asChild variant="secondary" className="w-full">
             <Link href="/templates">
               <LayoutTemplate className="size-4" /> Browse templates
             </Link>
           </Button>
-          <Button asChild>
+          <Button asChild className="w-full">
             <Link href="/templates">
               <CirclePlus className="size-4" /> New site
             </Link>
@@ -68,7 +68,7 @@ export default function DashboardOverviewPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard
           label="Total sites"
           value={

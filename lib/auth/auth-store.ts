@@ -70,12 +70,10 @@ function clearPersistedSession() {
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
-  const persistedSession = readPersistedSession();
-
   return {
-    user: persistedSession?.user ?? null,
-    accessToken: persistedSession?.accessToken ?? null,
-    status: persistedSession ? "authenticated" : "idle",
+    user: null,
+    accessToken: null,
+    status: "idle",
 
     setSession: (user, accessToken) => {
       setSessionHint();

@@ -13,10 +13,12 @@ export function StatCard({
   return (
     <Card className="p-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-fg-muted">{label}</p>
+        <div className="text-sm text-fg-muted">{label}</div>
         <Icon className="size-4 text-fg-subtle" />
       </div>
-      <p className="mt-3 font-display text-3xl font-semibold text-fg">{value}</p>
+      <div className="mt-3 font-display text-3xl font-semibold text-fg">
+        {value}
+      </div>
     </Card>
   );
 }

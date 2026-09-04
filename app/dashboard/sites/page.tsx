@@ -2,17 +2,25 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { LayoutGrid, List, Loader2, Plus } from "lucide-react";
+import { CirclePlus, LayoutGrid, List, Loader2, Plus } from "lucide-react";
 import { sitesApi } from "@/lib/api/sites";
 import type { Site, SiteStatus, SortOption } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SiteCard } from "@/components/sites/site-card";
 import { SiteTable } from "@/components/sites/site-table";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { ApiError } from "@/lib/api/client";
 
 type StatusFilter = "all" | SiteStatus;
 
@@ -26,24 +34,37 @@ export default function SitesPage() {
   const [sort, setSort] = useState<SortOption>("newest");
   const [view, setView] = useState<"grid" | "table">("grid");
 
-  const fetchSites = useCallback(async (opts: { reset: boolean; cursor?: string | null }) => {
-    if (opts.reset) setLoading(true);
-    else setLoadingMore(true);
-    try {
-      const res = await sitesApi.list({
-        status: status === "all" ? undefined : status,
-        sort,
-        cursor: opts.cursor ?? undefined,
-        limit: 12,
-      });
-      setSites((prev) => (opts.reset ? res.data : [...prev, ...res.data]));
-      setCursor(res.nextCursor);
-      setHasNextPage(res.hasNextPage);
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  }, [status, sort]);
+  const fetchSites = useCallback(
+    async (opts: { reset: boolean; cursor?: string | null }) => {
+      if (opts.reset) setLoading(true);
+      else setLoadingMore(true);
+      try {
+        const res = await sitesApi.list({
+          status: status === "all" ? undefined : status,
+          sort,
+          cursor: opts.cursor ?? undefined,
+          limit: 12,
+        });
+        setSites((prev) => (opts.reset ? res.data : [...prev, ...res.data]));
+        setCursor(res.nextCursor);
+        setHasNextPage(res.hasNextPage);
+      } catch (err) {
+        if (err instanceof ApiError && err.statusCode === 401) {
+          // Session genuinely expired (refresh failed) — the auth store's
+          // onUnauthorized hook already cleared state; middleware/Protected
+          // will redirect to /login on next render. Nothing else to do here.
+          return;
+        }
+        toast.error(
+          err instanceof ApiError ? err.message : "Couldn't load your sites",
+        );
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    },
+    [status, sort],
+  );
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional fetch-on-mount/filter-change
@@ -64,17 +85,22 @@ export default function SitesPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold text-fg">Sites</h1>
-          <p className="mt-1 text-sm text-fg-muted">Manage every site you&apos;ve created.</p>
+          <p className="mt-1 text-sm text-fg-muted">
+            Manage every site you&apos;ve created.
+          </p>
         </div>
         <Button asChild>
-          <Link href="/templates">
-            <Plus className="size-4" /> New site
+          <Link href="/dashboard/templates">
+            <CirclePlus className="size-4" /> New site
           </Link>
         </Button>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Tabs value={status} onValueChange={(v) => setStatus(v as StatusFilter)}>
+        <Tabs
+          value={status}
+          onValueChange={(v) => setStatus(v as StatusFilter)}
+        >
           <TabsList>
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="draft">Drafts</TabsTrigger>
@@ -97,14 +123,20 @@ export default function SitesPage() {
           <div className="flex rounded-md border border-border p-0.5">
             <button
               onClick={() => setView("grid")}
-              className={cn("rounded-sm p-1.5", view === "grid" ? "bg-bg-elevated text-fg" : "text-fg-subtle")}
+              className={cn(
+                "rounded-sm p-1.5",
+                view === "grid" ? "bg-bg-elevated text-fg" : "text-fg-subtle",
+              )}
               aria-label="Grid view"
             >
               <LayoutGrid className="size-4" />
             </button>
             <button
               onClick={() => setView("table")}
-              className={cn("rounded-sm p-1.5", view === "table" ? "bg-bg-elevated text-fg" : "text-fg-subtle")}
+              className={cn(
+                "rounded-sm p-1.5",
+                view === "table" ? "bg-bg-elevated text-fg" : "text-fg-subtle",
+              )}
               aria-label="Table view"
             >
               <List className="size-4" />
@@ -122,7 +154,9 @@ export default function SitesPage() {
       ) : sites.length === 0 ? (
         <Card className="flex flex-col items-center gap-3 px-6 py-20 text-center">
           <p className="text-sm text-fg-muted">
-            {status === "all" ? "You haven&apos;t created a site yet." : `No ${status} sites yet.`}
+            {status === "all"
+              ? "You haven&apos;t created a site yet."
+              : `No ${status} sites yet.`}
           </p>
           <div className="flex gap-3">
             <Button asChild variant="secondary" size="sm">
@@ -138,17 +172,32 @@ export default function SitesPage() {
           {view === "grid" ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {sites.map((site) => (
-                <SiteCard key={site.id} site={site} onChanged={handleChanged} onDeleted={handleDeleted} />
+                <SiteCard
+                  key={site.id}
+                  site={site}
+                  onChanged={handleChanged}
+                  onDeleted={handleDeleted}
+                />
               ))}
             </div>
           ) : (
-            <SiteTable sites={sites} onChanged={handleChanged} onDeleted={handleDeleted} />
+            <SiteTable
+              sites={sites}
+              onChanged={handleChanged}
+              onDeleted={handleDeleted}
+            />
           )}
 
           {hasNextPage ? (
             <div className="flex justify-center pt-2">
-              <Button variant="secondary" onClick={() => fetchSites({ reset: false, cursor })} disabled={loadingMore}>
-                {loadingMore ? <Loader2 className="size-4 animate-spin" /> : null}
+              <Button
+                variant="secondary"
+                onClick={() => fetchSites({ reset: false, cursor })}
+                disabled={loadingMore}
+              >
+                {loadingMore ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : null}
                 Load more
               </Button>
             </div>

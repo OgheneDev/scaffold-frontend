@@ -27,7 +27,11 @@ const CATEGORY_LABEL: Record<string, string> = {
   construction: "Construction",
 };
 
-export default function TemplateDetailPage({ params }: { params: Promise<{ templateId: string }> }) {
+export default function TemplateDetailPage({
+  params,
+}: {
+  params: Promise<{ templateId: string }>;
+}) {
   const { templateId } = use(params);
   const [template, setTemplate] = useState<Template | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -54,10 +58,17 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ templ
     }
   }
 
+  function handleGoBack(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    router.back();
+  }
+
   if (notFound) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg text-center">
-        <p className="text-sm text-fg-muted">This template doesn&apos;t exist.</p>
+        <p className="text-sm text-fg-muted">
+          This template doesn&apos;t exist.
+        </p>
         <Button asChild variant="secondary">
           <Link href="/templates">Back to templates</Link>
         </Button>
@@ -70,13 +81,22 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ templ
       <header className="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6">
           <div className="flex min-w-0 items-center gap-3">
-            <Link href="/templates" className="shrink-0 text-fg-subtle transition-colors hover:text-fg">
+            <button
+              onClick={handleGoBack}
+              className="shrink-0 cursor-pointer text-fg-subtle transition-colors hover:text-fg"
+              aria-label="Go back"
+              type="button"
+            >
               <ArrowLeft className="size-4" />
-            </Link>
+            </button>
             {template ? (
               <div className="min-w-0">
-                <p className="truncate font-display text-[15px] font-medium text-fg">{template.name}</p>
-                <p className="text-xs text-fg-subtle">{CATEGORY_LABEL[template.category] ?? template.category}</p>
+                <p className="truncate font-display text-[15px] font-medium text-fg">
+                  {template.name}
+                </p>
+                <p className="text-xs text-fg-subtle">
+                  {CATEGORY_LABEL[template.category] ?? template.category}
+                </p>
               </div>
             ) : (
               <Skeleton className="h-8 w-40" />
@@ -90,13 +110,19 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ templ
 
       {template?.description ? (
         <div className="mx-auto max-w-6xl px-6 pt-6">
-          <p className="max-w-xl text-sm text-fg-muted">{template.description}</p>
+          <p className="max-w-xl text-sm text-fg-muted">
+            {template.description}
+          </p>
         </div>
       ) : null}
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-4 flex items-center gap-2">
-          {template ? <Badge variant="outline">{CATEGORY_LABEL[template.category] ?? template.category}</Badge> : null}
+          {template ? (
+            <Badge variant="outline">
+              {CATEGORY_LABEL[template.category] ?? template.category}
+            </Badge>
+          ) : null}
         </div>
         <div className="overflow-hidden rounded-lg border border-border">
           {template ? (

@@ -101,7 +101,10 @@ const categories: Category[] = [
 
 const Categories = () => {
   return (
-    <section className="border-y border-border/60 bg-bg-inset/30 py-14">
+    <section
+      id="templates"
+      className="border-y border-border/60 bg-bg-inset/30 py-14"
+    >
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>

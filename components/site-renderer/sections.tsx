@@ -15,7 +15,7 @@ import type {
   TestimonialsContent,
 } from "@/lib/types";
 
-const container = "mx-auto w-full max-w-6xl px-6 md:px-10";
+const container = "mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-10";
 const radius = { borderRadius: "var(--site-radius)" };
 const headingFont = { fontFamily: "var(--site-heading-font)" };
 
@@ -49,10 +49,13 @@ export function NavbarSection({ content }: { content: NavbarContent }) {
   return (
     <header className="sticky top-0 z-30 w-full border-b border-(--site-muted)/20 bg-(--site-background)/90 backdrop-blur">
       <div className={`${container} flex h-16 items-center justify-between`}>
-        <span className="text-lg font-semibold" style={headingFont}>
+        <span
+          className="text-base sm:text-lg font-semibold"
+          style={headingFont}
+        >
           {content.logo}
         </span>
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {content.links.map((link) => (
             <span
               key={link.label}
@@ -114,24 +117,24 @@ export function NavbarSection({ content }: { content: NavbarContent }) {
 export function HeroSection({ content }: { content: HeroContent }) {
   return (
     <section
-      className={`${container} grid gap-12 py-20 md:grid-cols-2 md:items-center md:py-28`}
+      className={`${container} grid gap-10 py-16 grid-cols-1 md:grid-cols-2 md:items-center md:gap-12 md:py-28`}
     >
-      <div>
+      <div className="order-2 md:order-1">
         {content.eyebrow ? (
-          <p className="mb-4 text-sm font-medium text-(--site-primary)">
+          <p className="mb-3 text-xs sm:text-sm font-medium text-(--site-primary)">
             {content.eyebrow}
           </p>
         ) : null}
         <h1
-          className="text-4xl leading-[1.08] font-semibold md:text-5xl"
+          className="text-3xl leading-[1.1] font-semibold sm:text-4xl md:text-5xl"
           style={headingFont}
         >
           {content.heading}
         </h1>
-        <p className="mt-5 max-w-md text-[15px] leading-relaxed text-(--site-foreground)/70">
+        <p className="mt-4 text-sm sm:text-[15px] leading-relaxed text-(--site-foreground)/70 max-w-md">
           {content.description}
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-6 sm:mt-8 flex flex-wrap gap-3">
           {content.primaryButton ? (
             <span
               className="cursor-pointer rounded-(--site-radius) bg-(--site-primary) px-5 py-2.5 text-sm font-medium text-(--site-background) transition-opacity hover:opacity-90"
@@ -176,11 +179,11 @@ export function HeroSection({ content }: { content: HeroContent }) {
         <Img
           src={content.image.src}
           alt={content.image.alt}
-          className="aspect-4/3 w-full object-cover"
+          className="order-1 md:order-2 aspect-4/3 w-full object-cover"
         />
       ) : (
         <div
-          className="aspect-4/3 w-full rounded-(--site-radius) bg-(--site-primary)/10"
+          className="order-1 md:order-2 aspect-4/3 w-full rounded-(--site-radius) bg-(--site-primary)/10"
           style={radius}
         />
       )}
@@ -193,26 +196,29 @@ export function HeroSection({ content }: { content: HeroContent }) {
 // ---------------------------------------------------------------------------
 export function FeaturesSection({ content }: { content: FeaturesContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading
         heading={content.heading}
         description={content.description}
       />
-      <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 md:mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {content.items.map((item) => (
-          <div key={item.title}>
+          <div key={item.title} className="p-1 sm:p-0">
             <div
-              className="mb-4 flex size-10 items-center justify-center bg-(--site-primary)/10 text-(--site-primary)"
+              className="mb-3 sm:mb-4 flex size-9 sm:size-10 items-center justify-center bg-(--site-primary)/10 text-(--site-primary)"
               style={radius}
             >
-              <span className="text-sm font-semibold">
+              <span className="text-xs sm:text-sm font-semibold">
                 {(item.icon || item.title)[0]}
               </span>
             </div>
-            <h3 className="text-base font-semibold" style={headingFont}>
+            <h3
+              className="text-sm sm:text-base font-semibold"
+              style={headingFont}
+            >
               {item.title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-(--site-foreground)/65">
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-(--site-foreground)/65">
               {item.description}
             </p>
           </div>
@@ -227,12 +233,12 @@ export function FeaturesSection({ content }: { content: FeaturesContent }) {
 // ---------------------------------------------------------------------------
 export function ServicesSection({ content }: { content: ServicesContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading
         heading={content.heading}
         description={content.description}
       />
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 md:mt-12 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {content.items.map((item) => (
           <div
             key={item.title}
@@ -243,14 +249,17 @@ export function ServicesSection({ content }: { content: ServicesContent }) {
               <Img
                 src={item.image.src}
                 alt={item.image.alt}
-                className="h-40 w-full object-cover"
+                className="h-48 sm:h-40 w-full object-cover"
               />
             ) : null}
-            <div className="p-5">
-              <h3 className="text-base font-semibold" style={headingFont}>
+            <div className="p-4 sm:p-5">
+              <h3
+                className="text-sm sm:text-base font-semibold"
+                style={headingFont}
+              >
                 {item.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-(--site-foreground)/65">
+              <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-(--site-foreground)/65">
                 {item.description}
               </p>
             </div>
@@ -267,25 +276,25 @@ export function ServicesSection({ content }: { content: ServicesContent }) {
 export function AboutSection({ content }: { content: AboutContent }) {
   return (
     <section
-      className={`${container} grid gap-12 py-20 md:grid-cols-2 md:items-center`}
+      className={`${container} grid gap-10 py-16 md:grid-cols-2 md:items-center md:gap-12 md:py-20`}
     >
       {content.image ? (
         <Img
           src={content.image.src}
           alt={content.image.alt}
-          className="aspect-square w-full object-cover"
+          className="order-1 md:order-none aspect-square w-full object-cover"
         />
       ) : (
         <div
-          className="aspect-square w-full bg-(--site-primary)/10"
+          className="order-1 md:order-none aspect-square w-full bg-(--site-primary)/10"
           style={radius}
         />
       )}
-      <div>
-        <h2 className="text-3xl font-semibold" style={headingFont}>
+      <div className="order-2 md:order-none">
+        <h2 className="text-2xl sm:text-3xl font-semibold" style={headingFont}>
           {content.heading}
         </h2>
-        <p className="mt-4 text-[15px] leading-relaxed text-(--site-foreground)/70">
+        <p className="mt-3 sm:mt-4 text-sm sm:text-[15px] leading-relaxed text-(--site-foreground)/70">
           {content.description}
         </p>
       </div>
@@ -298,25 +307,25 @@ export function AboutSection({ content }: { content: AboutContent }) {
 // ---------------------------------------------------------------------------
 export function StatsSection({ content }: { content: StatsContent }) {
   return (
-    <section className={`${container} py-16`}>
+    <section className={`${container} py-12 md:py-16`}>
       {content.heading ? (
         <h2
-          className="mb-10 text-center text-2xl font-semibold"
+          className="mb-8 md:mb-10 text-center text-xl sm:text-2xl font-semibold"
           style={headingFont}
         >
           {content.heading}
         </h2>
       ) : null}
-      <div className="grid grid-cols-2 gap-8 border-t border-(--site-muted)/25 pt-10 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-6 border-t border-(--site-muted)/25 pt-8 md:pt-10 md:grid-cols-4 md:gap-8">
         {content.items.map((item) => (
           <div key={item.label} className="text-center">
             <div
-              className="text-3xl font-semibold text-(--site-primary)"
+              className="text-2xl sm:text-3xl font-semibold text-(--site-primary)"
               style={headingFont}
             >
               {item.value}
             </div>
-            <div className="mt-1 text-sm text-(--site-foreground)/60">
+            <div className="mt-1 text-xs sm:text-sm text-(--site-foreground)/60">
               {item.label}
             </div>
           </div>
@@ -335,28 +344,30 @@ export function TestimonialsSection({
   content: TestimonialsContent;
 }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading heading={content.heading} />
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <div className="mt-10 md:mt-12 grid gap-4 sm:gap-6 md:grid-cols-3">
         {content.items.map((item) => (
           <figure
             key={item.name}
-            className="border border-(--site-muted)/25 p-6"
+            className="border border-(--site-muted)/25 p-5 sm:p-6"
             style={radius}
           >
-            <blockquote className="text-[15px] leading-relaxed text-(--site-foreground)/80">
+            <blockquote className="text-sm sm:text-[15px] leading-relaxed text-(--site-foreground)/80">
               “{item.quote}”
             </blockquote>
-            <figcaption className="mt-5 flex items-center gap-3">
+            <figcaption className="mt-4 sm:mt-5 flex items-center gap-3">
               <Img
                 src={item.avatar?.src}
                 alt={item.avatar?.alt ?? item.name}
-                className="size-9 shrink-0 rounded-full object-cover"
+                className="size-8 sm:size-9 shrink-0 rounded-full object-cover"
               />
               <div>
-                <div className="text-sm font-medium">{item.name}</div>
+                <div className="text-xs sm:text-sm font-medium">
+                  {item.name}
+                </div>
                 {item.role ? (
-                  <div className="text-xs text-(--site-foreground)/55">
+                  <div className="text-[10px] sm:text-xs text-(--site-foreground)/55">
                     {item.role}
                   </div>
                 ) : null}
@@ -374,13 +385,13 @@ export function TestimonialsSection({
 // ---------------------------------------------------------------------------
 export function PricingSection({ content }: { content: PricingContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading heading={content.heading} />
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <div className="mt-10 md:mt-12 grid gap-4 sm:gap-6 md:grid-cols-3">
         {content.plans.map((plan) => (
           <div
             key={plan.name}
-            className="flex flex-col border p-6"
+            className="flex flex-col border p-5 sm:p-6"
             style={{
               ...radius,
               borderColor: plan.highlighted
@@ -391,26 +402,35 @@ export function PricingSection({ content }: { content: PricingContent }) {
                 : "transparent",
             }}
           >
-            <h3 className="text-base font-semibold" style={headingFont}>
+            <h3
+              className="text-sm sm:text-base font-semibold"
+              style={headingFont}
+            >
               {plan.name}
             </h3>
-            <div className="mt-3 text-3xl font-semibold" style={headingFont}>
+            <div
+              className="mt-2 sm:mt-3 text-2xl sm:text-3xl font-semibold"
+              style={headingFont}
+            >
               {plan.price}
             </div>
             {plan.description ? (
-              <p className="mt-2 text-sm text-(--site-foreground)/60">
+              <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-(--site-foreground)/60">
                 {plan.description}
               </p>
             ) : null}
-            <ul className="mt-6 flex-1 space-y-2.5">
+            <ul className="mt-4 sm:mt-6 flex-1 space-y-2">
               {plan.features.map((f) => (
-                <li key={f} className="text-sm text-(--site-foreground)/75">
+                <li
+                  key={f}
+                  className="text-xs sm:text-sm text-(--site-foreground)/75"
+                >
                   · {f}
                 </li>
               ))}
             </ul>
             <span
-              className="mt-6 inline-flex cursor-pointer justify-center px-4 py-2.5 text-sm font-medium transition-opacity hover:opacity-90"
+              className="mt-4 sm:mt-6 inline-flex cursor-pointer justify-center px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition-opacity hover:opacity-90"
               style={{
                 ...radius,
                 background: plan.highlighted
@@ -447,18 +467,18 @@ export function PricingSection({ content }: { content: PricingContent }) {
 // ---------------------------------------------------------------------------
 export function FaqSection({ content }: { content: FaqContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading heading={content.heading} />
-      <div className="mx-auto mt-10 max-w-2xl divide-y divide-(--site-muted)/25 border-y border-(--site-muted)/25">
+      <div className="mx-auto mt-8 md:mt-10 max-w-2xl divide-y divide-(--site-muted)/25 border-y border-(--site-muted)/25">
         {content.items.map((item) => (
-          <details key={item.question} className="group py-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between text-[15px] font-medium">
-              {item.question}
-              <span className="ml-4 text-(--site-foreground)/40 transition-transform group-open:rotate-45">
+          <details key={item.question} className="group py-3 sm:py-4">
+            <summary className="flex cursor-pointer list-none items-center justify-between text-sm sm:text-[15px] font-medium">
+              <span className="pr-4">{item.question}</span>
+              <span className="ml-2 sm:ml-4 text-(--site-foreground)/40 transition-transform group-open:rotate-45 flex-shrink-0">
                 +
               </span>
             </summary>
-            <p className="mt-3 text-sm leading-relaxed text-(--site-foreground)/65">
+            <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-relaxed text-(--site-foreground)/65">
               {item.answer}
             </p>
           </details>
@@ -473,9 +493,9 @@ export function FaqSection({ content }: { content: FaqContent }) {
 // ---------------------------------------------------------------------------
 export function GallerySection({ content }: { content: GalleryContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading heading={content.heading} />
-      <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className="mt-8 md:mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
         {content.images.map((img, i) => (
           <Img
             key={i}
@@ -494,9 +514,9 @@ export function GallerySection({ content }: { content: GalleryContent }) {
 // ---------------------------------------------------------------------------
 export function TeamSection({ content }: { content: TeamContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <SectionHeading heading={content.heading} />
-      <div className="mt-10 grid grid-cols-2 gap-8 md:grid-cols-4">
+      <div className="mt-8 md:mt-10 grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
         {content.members.map((m) => (
           <div key={m.name}>
             <Img
@@ -504,8 +524,12 @@ export function TeamSection({ content }: { content: TeamContent }) {
               alt={m.image.alt}
               className="aspect-square w-full object-cover"
             />
-            <div className="mt-3 text-sm font-medium">{m.name}</div>
-            <div className="text-xs text-(--site-foreground)/55">{m.role}</div>
+            <div className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium">
+              {m.name}
+            </div>
+            <div className="text-[10px] sm:text-xs text-(--site-foreground)/55">
+              {m.role}
+            </div>
           </div>
         ))}
       </div>
@@ -518,25 +542,28 @@ export function TeamSection({ content }: { content: TeamContent }) {
 // ---------------------------------------------------------------------------
 export function CtaSection({ content }: { content: CtaContent }) {
   return (
-    <section className={`${container} py-20`}>
+    <section className={`${container} py-16 md:py-20`}>
       <div
-        className="flex flex-col items-center gap-5 px-8 py-16 text-center"
+        className="flex flex-col items-center gap-4 sm:gap-5 px-6 sm:px-8 py-12 sm:py-16 text-center"
         style={{
           ...radius,
           background:
             "color-mix(in srgb, var(--site-primary) 10%, transparent)",
         }}
       >
-        <h2 className="max-w-lg text-3xl font-semibold" style={headingFont}>
+        <h2
+          className="text-2xl sm:text-3xl font-semibold max-w-lg"
+          style={headingFont}
+        >
           {content.heading}
         </h2>
         {content.description ? (
-          <p className="max-w-md text-[15px] text-(--site-foreground)/70">
+          <p className="text-sm sm:text-[15px] text-(--site-foreground)/70 max-w-md">
             {content.description}
           </p>
         ) : null}
         <span
-          className="mt-2 cursor-pointer rounded-(--site-radius) bg-(--site-primary) px-6 py-2.5 text-sm font-medium text-(--site-background) transition-opacity hover:opacity-90"
+          className="mt-1 sm:mt-2 cursor-pointer rounded-(--site-radius) bg-(--site-primary) px-5 sm:px-6 py-2 sm:py-2.5 text-sm font-medium text-(--site-background) transition-opacity hover:opacity-90"
           style={radius}
           onClick={() => (window.location.href = content.button.href)}
           role="button"
@@ -560,18 +587,18 @@ export function CtaSection({ content }: { content: CtaContent }) {
 // ---------------------------------------------------------------------------
 export function FooterSection({ content }: { content: FooterContent }) {
   return (
-    <footer className="border-t border-(--site-muted)/20 py-10">
+    <footer className="border-t border-(--site-muted)/20 py-8 md:py-10">
       <div
-        className={`${container} flex flex-col items-center justify-between gap-4 md:flex-row`}
+        className={`${container} flex flex-col items-center gap-4 md:flex-row md:justify-between`}
       >
         <span className="text-sm font-semibold" style={headingFont}>
           {content.logo}
         </span>
-        <nav className="flex flex-wrap items-center justify-center gap-6">
+        <nav className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
           {content.links.map((link) => (
             <span
               key={link.label}
-              className="cursor-pointer text-sm text-(--site-foreground)/60 hover:text-(--site-foreground)"
+              className="cursor-pointer text-xs sm:text-sm text-(--site-foreground)/60 hover:text-(--site-foreground)"
               onClick={() => {
                 if (link.href.startsWith("#")) {
                   document
@@ -600,7 +627,7 @@ export function FooterSection({ content }: { content: FooterContent }) {
             </span>
           ))}
         </nav>
-        <span className="text-xs text-(--site-foreground)/45">
+        <span className="text-[10px] sm:text-xs text-(--site-foreground)/45">
           {content.copyright}
         </span>
       </div>
@@ -617,11 +644,11 @@ function SectionHeading({
 }) {
   return (
     <div className="max-w-xl">
-      <h2 className="text-3xl font-semibold" style={headingFont}>
+      <h2 className="text-2xl sm:text-3xl font-semibold" style={headingFont}>
         {heading}
       </h2>
       {description ? (
-        <p className="mt-3 text-[15px] text-(--site-foreground)/65">
+        <p className="mt-2 sm:mt-3 text-sm sm:text-[15px] text-(--site-foreground)/65">
           {description}
         </p>
       ) : null}

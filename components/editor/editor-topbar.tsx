@@ -16,6 +16,7 @@ import { useEditorStore, type SaveStatus } from "@/lib/editor/editor-store";
 import { sitesApi } from "@/lib/api/sites";
 import { ApiError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 function SaveStatusLabel({ status }: { status: SaveStatus }) {
   if (status === "saving") {
@@ -71,6 +72,16 @@ export function EditorTopBar() {
     }
   }
 
+  const Logo = ({ className }: { className?: string }) => (
+    <Image
+      src="https://res.cloudinary.com/dgc8cd67w/image/upload/v1788298054/ChatGPT_Image_Sep_1_2026_10_27_51_PM_b1eh04.png"
+      alt="Scaffold Logo"
+      width={26}
+      height={26}
+      className={cn("rounded-sm object-contain shadow-sm", className)}
+    />
+  );
+
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-bg-elevated px-4">
       <div className="flex min-w-0 items-center gap-3">
@@ -80,9 +91,7 @@ export function EditorTopBar() {
         >
           <ArrowLeft className="size-4" />
         </Link>
-        <span className="flex size-6 shrink-0 items-center justify-center rounded-sm bg-accent text-[13px] font-bold text-accent-foreground">
-          B
-        </span>
+        <Logo />
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}

@@ -107,7 +107,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border/60 bg-bg/50 px-4 py-5 md:flex backdrop-blur-xl">
         <Link
-          href="/dashboard"
+          href="/"
           className="mb-8 flex items-center gap-3 px-2 transition-opacity hover:opacity-80"
         >
           <Logo />
@@ -120,7 +120,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           asChild
           className="mb-8 w-full justify-start font-medium text-md shadow-sm transition-transform hover:scale-[1.02]"
         >
-          <Link href="/templates">
+          <Link href="/dashboard/templates">
             <CirclePlus size={29} className="mr-2" /> New site
           </Link>
         </Button>
@@ -202,8 +202,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             </div>
 
             <Button asChild className="mb-8 w-full justify-start shadow-sm">
-              <Link href="/templates" onClick={() => setMobileOpen(false)}>
-                <Plus className="mr-2 size-4" /> New site
+              <Link
+                href="/dashboard/templates"
+                onClick={() => setMobileOpen(false)}
+              >
+                <CirclePlus className="mr-2 size-4" /> New site
               </Link>
             </Button>
 

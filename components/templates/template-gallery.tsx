@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Loader2,
   FolderOpen,
@@ -44,6 +44,7 @@ function formatCategoryName(cat: string): string {
 }
 
 export function TemplateGallery() {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -98,8 +99,8 @@ export function TemplateGallery() {
     if (category) params.set("category", category);
     if (sort !== "name-asc") params.set("sort", sort);
     const qs = params.toString();
-    router.replace(qs ? `/templates?${qs}` : "/templates", { scroll: false });
-  }, [category, sort, fetchTemplates, router]);
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [category, sort, fetchTemplates, pathname, router]);
 
   // Keep state updated if URL changes externally
   useEffect(() => {
